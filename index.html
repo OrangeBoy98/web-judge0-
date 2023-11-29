@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        textarea{
+            width: 100%;
+            resize: none;
+        }
+        .box{
+            box-sizing: border-box;
+            height: 100px;
+        }
+        #box1{
+            float: left;
+            width: 40%;
+            padding-left: 10%;
+        }
+        #box2{
+            float: right;
+            width: 40%;
+            padding-right: 10%;
+        }
+    </style>
+    <title>Document</title>
+    <script>
+        function send_text(){
+            var in_code = document.getElementById('inputcode').value;
+            var id_lang = document.getElementById('select_id').value;
+            fetch("http://34.64.117.128:80/submissions/?base64_encode=false&wait=true", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    source_code: in_code, language_id: id_lang
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                var out_code = document.getElementById('outputcode');
+                if(data.stdout){
+                    out_code.value = data.stdout;
+                }
+                else if(data.stderr){
+                    out_code.value = data.stderr;
+                }
+                else{
+                    out_code.value = data.compile_output;
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+    <nav>
+        <label for="select_id">Language:</label>
+        <select id="select_id">
+            <option value="">Select</option>
+            <option value="48">C</option>
+            <option value="71">Python</option>
+        </select>
+        <input type="button" value="run" onclick="send_text()"/>
+    </nav>
+    <div class="box" id="box1">
+        소스코드<br/>
+        <textarea id="inputcode" rows="20px"></textarea>
+    </div>
+    <div class="box" id="box2">
+        결과<br/>
+        <textarea id="outputcode" rows="20px" readonly></textarea>
+    </div>
+</body>
+</html>
