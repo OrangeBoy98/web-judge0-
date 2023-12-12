@@ -15,6 +15,7 @@
             font-weight: 500;
             background-color: #f4f4f4;
             color: #333;
+            overflow: hidden;
         }
         #header {
             display: flex;
@@ -35,7 +36,7 @@
             height: 100%;
             border-radius: 8px;
             border: 1px solid #ddd;
-            font-size: 21px;
+            font-size: 16px;
             resize: none;
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -62,6 +63,26 @@
         button:hover {
             background-color: #0056b3;
         }
+
+        /* 화면 너비가 특정 이하일 때 배치와 화살표 방향 변경 */
+        @media screen and (max-width: 1000px) {
+        #container {
+            flex-direction: column;
+        }
+
+        textarea {
+            width: flex;
+            margin: 10px 0;
+        }
+
+        #arrow-container {
+            flex-direction: column;
+        }
+
+        .arrow {
+            transform: rotate(90deg);
+        }
+    }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
