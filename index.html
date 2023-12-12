@@ -3,32 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Compiler</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&display=swap" rel="stylesheet">
     <style>
-        textarea{
-            width: 100%;
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Inconsolata', monospace;
+            font-weight: 500;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        #header {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #container {
+            display: flex;
+            height: calc(100% - 60px); /* Header 높이만큼 제외 */
+            padding: 20px;
+        }
+        textarea {
+            flex: 1;
+            margin: 0 10px;
+            padding: 10px;
+            height: 100%;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 21px;
             resize: none;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        .box{
-            box-sizing: border-box;
-            height: 100px;
+        #arrow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        #box1{
-            float: left;
-            width: 40%;
-            padding-left: 10%;
+        .arrow {
+            font-size: 24px;
+            color: #007bff;
         }
-        #box2{
-            float: right;
-            width: 40%;
-            padding-right: 10%;
+        #controls, select, button {
+            margin: 0 10px;
+            padding: 10px 15px;
+            border-radius: 4px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
-    <title>Document</title>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var selectEl = document.getElementById('select_id');
+            var inputTextarea = document.getElementById('inputcode');
+
+            selectEl.addEventListener('change', function() {
+                if (this.value == 71) {
+                    inputTextarea.value = 'print("hello world")';
+                } 
+                else if (this.value == 48) {
+                     inputTextarea.value = 
+                     '#include <stdio.h>\nint main(){\n    printf("hello world");\n    return 0;\n}';
+                }
+            });
+        });
         function send_text(){
             var in_code = document.getElementById('inputcode').value;
             var id_lang = document.getElementById('select_id').value;
-            fetch("http://34.64.117.128:80/submissions/?base64_encode=false&wait=true", {
+            fetch("http://127.0.0.1:2358/submissions/?base64_encode=false&wait=true", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -54,22 +107,21 @@
     </script>
 </head>
 <body>
-    <nav>
-        <label for="select_id">Language:</label>
+    <div id="header">
         <select id="select_id">
             <option value="">Select</option>
-            <option value="48">C</option>
             <option value="71">Python</option>
+            <option value="48">C</option>
+            <!-- 언어추가 -->
         </select>
-        <input type="button" value="run" onclick="send_text()"/>
-    </nav>
-    <div class="box" id="box1">
-        소스코드<br/>
-        <textarea id="inputcode" rows="20px"></textarea>
+        <button id="run" onclick="send_text()">Run</button>
     </div>
-    <div class="box" id="box2">
-        결과<br/>
-        <textarea id="outputcode" rows="20px" readonly></textarea>
+    <div id="container">
+        <textarea id="inputcode" placeholder="Enter your code here..."></textarea>
+        <div id="arrow-container">
+            <span class="arrow">&#8594;</span>
+        </div>
+        <textarea id="outputcode" readonly></textarea>
     </div>
 </body>
 </html>
